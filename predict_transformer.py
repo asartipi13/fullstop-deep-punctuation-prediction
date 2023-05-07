@@ -13,7 +13,7 @@ def predict_sent_end(model: str, data_zip: str, lang: str, data_set: str, outdir
     Path(outdir).mkdir(parents=True, exist_ok=True)
 
     print(f'using model {model}')
-    pipe = pipeline("ner", model = model, grouped_entities=False, device=0)
+    pipe = pipeline("ner", model = model, grouped_entities=False)
 
 
     with ZipFile(data_zip, 'r') as zf:
@@ -23,7 +23,7 @@ def predict_sent_end(model: str, data_zip: str, lang: str, data_set: str, outdir
             fname for fname in fnames
             if fname.startswith(relevant_dir) and fname.endswith('.tsv')
         ]
-
+        tsv_files = ['sepp_nlg_2021_data/fa/test/test.tsv']
         for i, tsv_file in enumerate(tqdm(tsv_files), 1):
             if not overwrite and Path(os.path.join(outdir, os.path.basename(tsv_file))).exists():
                 continue
@@ -44,7 +44,36 @@ def overlap_chunks(lst, n, stride=0):
     for i in range(0, len(lst), n-stride):
             yield lst[i:i + n]
 
-label_2_id = {"0":0, ".":1, ",":2, "?":3, "-":4, ":":5}
+# label_2_id = {"0":0, ".":1, ",":2, "?":3, "-":4, ":":5}
+
+self.label_2_id = {"0":0,
+                    ".":1,
+                    "؟":2,
+                    "!":3,
+                    "،":4,
+                    ":":5} 
+# label_2_id = {
+#             '0':0, 
+#             '–': 1,
+#             '~': 2,
+#             '"': 3,
+#             '•': 4,
+#             '…': 5,
+#             '.': 6,
+#             '—': 7,
+#             '}': 8,
+#             '(': 9,
+#             '/': 10,
+#             '،': 11,
+#             "'": 12,
+#             '-': 13,
+#             '{': 14,
+#             '!': 15,
+#             ')': 16,
+#             ',': 17,
+#             '\\': 18,
+#             '?': 19,
+#             '؟': 20}
 id_2_label = list(label_2_id.keys())
 
 def map_label_task_2(label):
@@ -114,12 +143,15 @@ def predict(pipe,words, task):
 
 if __name__ == '__main__':    
     import argparse
-    parser = argparse.ArgumentParser(description='spaCy baseline for subtask 1 of SEPP-NLG 2021')
-    parser.add_argument("data_zip", help="path to data zip file, e.g. 'data/sepp_nlg_2021_train_dev_data.zip'")
-    parser.add_argument("language", help="target language ('en', 'de', 'fr', 'it'; i.e. one of the subfolders in the zip file's main folder)")
-    parser.add_argument("data_set", help="dataset to be evaluated (usually 'dev', 'test'), subfolder of 'lang'")
-    parser.add_argument("outdir", help="folder to store predictions in, e.g. 'data/predictions' (language and dataset subfolders will be created automatically)")
-    parser.add_argument("model",help="path to transformers model")  
-    parser.add_argument("task",help="task one or two")
-    args = parser.parse_args()    
-    predict_sent_end(args.model,args.data_zip, args.language, args.data_set, args.outdir,args.task, True)
+    # parser = argparse.ArgumentParser(description='spaCy baseline for subtask 1 of SEPP-NLG 2021')
+    # parser.add_argument("data_zip", help="path to data zip file, e.g. 'data/sepp_nlg_2021_train_dev_data.zip'")
+    # parser.add_argument("language", help="target language ('en', 'de', 'fr', 'it'; i.e. one of the subfolders in the zip file's main folder)")
+    # parser.add_argument("data_set", help="dataset to be evaluated (usually 'dev', 'test'), subfolder of 'lang'")
+    # parser.add_argument("outdir", help="folder to store predictions in, e.g. 'data/predictions' (language and dataset subfolders will be created automatically)")
+    # parser.add_argument("model",help="path to transformers model")  
+    # parser.add_argument("task",help="task one or two")
+    # args = parser.parse_args()
+
+    # !python predict_transformer.py  fa test   2
+
+    predict_sent_end("models\\xlm-roberta-base-fa-1-task2\\final\\","data\\sepp_nlg_2021_train_dev_data_v5.zip", "fa", "test", "data\\predictions-final-multilang-task2",2, True)

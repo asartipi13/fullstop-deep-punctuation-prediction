@@ -20,7 +20,13 @@ batch_size = 8
 label_all_tokens = True
 data_factor = 1 # train and test on x percent of the data
 
-label_2_id = {"0":0, ".":1, ",":2, "?":3, "!":4, ";":5}
+# label_2_id = {"0":0, ".":1, ",":2, "?":3, "!":4, ";":5}
+label_2_id = {"0":0,
+                ".":1,
+                "؟":2,
+                "!":3,
+                "،":4,
+                ":":5} 
 
 ## load data
 

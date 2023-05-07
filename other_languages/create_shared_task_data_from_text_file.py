@@ -135,7 +135,7 @@ if __name__ == '__main__':
     print("Reads a corpus text file and converts it to tsv format suitable for training")
 
     # Input corpus. Each line is a sentence
-    input_corpus = './other_languages/my_text_file.txt'
+    input_corpus = './other_languages/my_text_file copy.txt'
     outpath = 'sepp_nlg_2021_data/'
 
     # target zip file to produce (the system expects sepp_nlg_2021_train_dev_data_v5.zip)

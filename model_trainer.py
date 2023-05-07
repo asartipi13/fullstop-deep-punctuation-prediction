@@ -29,27 +29,33 @@ class ModelTrainer():
             self.label_2_id = {"0":0, "1":1}
         else:
             # self.label_2_id = {"0":0, ".":1, ",":2, "?":3, "-":4, ":":5} 
-            self.label_2_id = {'0':0, 
-                                '–': 1,
-                                '~': 2,
-                                '"': 3,
-                                '•': 4,
-                                '…': 5,
-                                '.': 6,
-                                '—': 7,
-                                '}': 8,
-                                '(': 9,
-                                '/': 10,
-                                '،': 11,
-                                "'": 12,
-                                '-': 13,
-                                '{': 14,
-                                '!': 15,
-                                ')': 16,
-                                ',': 17,
-                                '\\': 18,
-                                '?': 19,
-                                '؟': 20}
+            self.label_2_id = {"0":0,
+                               ".":1,
+                               "؟":2,
+                               "!":3,
+                               "،":4,
+                               ":":5} 
+            # self.label_2_id = {'0':0, 
+            #                     '–': 1,
+            #                     '~': 2,
+            #                     '"': 3,
+            #                     '•': 4,
+            #                     '…': 5,
+            #                     '.': 6,
+            #                     '—': 7,
+            #                     '}': 8,
+            #                     '(': 9,
+            #                     '/': 10,
+            #                     '،': 11,
+            #                     "'": 12,
+            #                     '-': 13,
+            #                     '{': 14,
+            #                     '!': 15,
+            #                     ')': 16,
+            #                     ',': 17,
+            #                     '\\': 18,
+            #                     '?': 19,
+            #                     '؟': 20}
 
         self.id_2_label = list(self.label_2_id.keys())        
     
@@ -103,13 +109,13 @@ class ModelTrainer():
             if self.task == 1:
                 precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average="binary")  
             else:
-                precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average="macro")  
+                precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average="macro", zero_division=True)  
                 print("\n----- report -----\n")
-                report = classification_report(labels, preds,target_names=self.label_2_id.keys())
-                print(report)
+                # report = classification_report(labels, preds,target_names=self.label_2_id.keys(), zero_division=True)
+                # print(report)
                 print("\n----- confusion matrix -----\n")
-                cm = confusion_matrix(labels,preds,normalize="true")
-                print_cm(cm,self.id_2_label)
+                # cm = confusion_matrix(labels,preds,normalize="true")
+                # print_cm(cm,self.id_2_label)
 
             acc = accuracy_score(labels, preds)    
             return {     
